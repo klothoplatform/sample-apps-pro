@@ -1,7 +1,7 @@
 /**
  * 
  * @klotho::execution_unit {
- *   id = "users-store"
+ *   id = "microsrv-users"
  * }
  */
 

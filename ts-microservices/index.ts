@@ -1,12 +1,11 @@
 /**
  * @klotho::execution_unit {
- *   id = "users-api"
+ *   id = "microsrv-api"
  * }
  */
 
 import express = require('express')
 import { addUser, getUsers } from './users';
-import {set, getOrg} from './userInfo'
 
 const app = express()
 const router = express.Router();
@@ -32,28 +31,6 @@ router.put('/users/:user', async (req, res) => {
     res.status(500).send(e)
   }
 })
-
-app.use(express.json());
-
-app.post("/users/:user/info", async (req, res) => {
-  try {
-    const user = req.params["user"];
-    const age = req.body["age"];
-    const org = req.body["org"];
-  
-    await set(user, age, org);
-    res.send("success"); 
-  } catch (e) {
-    console.log("error adding user info", e)
-    res.status(500).send(e)
-  }
-});
-
-app.get("/users/:user/info", async (req, res) => {
-  const value = await getOrg(req.params["user"]);
-  res.send(value);
-});
-
 
 app.use(router)
 
