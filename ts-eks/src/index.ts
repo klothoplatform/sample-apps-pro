@@ -57,9 +57,10 @@ app.get("/users/:user/info", async (req, res) => {
 
 app.use(router)
 
-/* @klotho::expose {
- *  target = "public"
- *  id = "app"
+/**
+ * @klotho::expose {
+ *   target = "public"
+ *   id = "app"
  * }
  */
 app.listen(3000, async () => {
