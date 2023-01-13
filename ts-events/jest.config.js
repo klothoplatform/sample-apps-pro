@@ -2,5 +2,6 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  runner: "groups"
+  runner: "groups",
+  testTimeout: 15000
 };

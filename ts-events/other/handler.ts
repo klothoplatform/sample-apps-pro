@@ -4,9 +4,9 @@
  * }
  */
 
-import * as pkg from "../emitter"
+ import { MyEmitter } from "../emitter"
 
-pkg.MyEmitter.on('other', async () => {
+MyEmitter.on('other', async () => {
   console.log(`...`)
   await new Promise(resolve => setTimeout(resolve, Math.random() * 4000 + 1000)) // sleep random 1-5 seconds
   console.log(`!`)
