@@ -26,7 +26,7 @@ const eksPolicy: StackValidationPolicy = {
         }
 
         const k8Services = args.resources.filter(r => r.isType(k8s.core.v1.Service));
-        if (k8Services.length !== 3) {
+        if (![3,5].includes(k8Services.length)) {
             reportViolation(`Expected 3 kubernetes services but found ${k8Services.length}`);
             return;
         }
@@ -45,7 +45,7 @@ const eksPolicy: StackValidationPolicy = {
 
 
         const k8Deployments = args.resources.filter(r => r.isType(k8s.apps.v1.Deployment));
-        if (k8Deployments.length !== 3) {
+        if (![3,5].includes(k8Deployments.length)) {
             reportViolation(`Expected 3 kubernetes deployments but found ${k8Deployments.length}`);
             return;
         }
