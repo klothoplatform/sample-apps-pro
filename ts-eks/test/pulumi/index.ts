@@ -9,7 +9,7 @@ const eksPolicy: StackValidationPolicy = {
     validateStack: async (args, reportViolation) => {
         const eksClusters = args.resources.filter(r => r.isType(aws.eks.Cluster));
         if (eksClusters.length !== 1) {
-            reportViolation(`Expected EKS 1 cluster but found ${eksClusters.length}`);
+            reportViolation(`Expected 1 EKS cluster but found ${eksClusters.length}`);
             return;
         }
         const cluster = eksClusters[0].asType(aws.eks.Cluster)
