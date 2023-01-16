@@ -17,11 +17,11 @@ import { MyEmitter } from "./emitter"
 MyEmitter.on('hello', async (user) => {
   console.log(`hello ${user}`)
   await new Promise(resolve => setTimeout(resolve, 1000)) // sleep 1s
-  users.set(user, user);
+  await users.set(user, user);
   console.log(`goodbye ${user}`)
   MyEmitter.emit("other", "disconnecting")
 })
-
-export const getUser = async (user: string) => {
+ 
+export async function getUser(user: string) {
   return await users.get(user)
 }

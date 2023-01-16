@@ -4,6 +4,12 @@ const testUser = "user"
 const axios = require('axios');
 const apiEndpoint = process.env['API_ENDPOINT']
 
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 /**
  * @group integration
  */
@@ -23,6 +29,7 @@ describe('Happy Path Test', () => {
     })
 
     test('get', async () => {
+	await sleep(10000) 
         let actualResponse = await axios({
             method: 'get',
             url: `${apiEndpoint}/hello/${testUser}`,
