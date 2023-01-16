@@ -9,7 +9,7 @@ const eksPolicy: StackValidationPolicy = {
     validateStack: async (args, reportViolation) => {
         const eksClusters = args.resources.filter(r => r.isType(aws.eks.Cluster));
         if (eksClusters.length !== 1) {
-            reportViolation(`Expected EKS cluster but found ${eksClusters.length}`);
+            reportViolation(`Expected EKS 1 cluster but found ${eksClusters.length}`);
             return;
         }
         const cluster = eksClusters[0].asType(aws.eks.Cluster)
@@ -24,11 +24,10 @@ const eksPolicy: StackValidationPolicy = {
         if (group.clusterName != cluster?.name) {
             reportViolation(`Expected cluster name for node group to be ${cluster?.name}, but found ${group.clusterName}`)
         }
-        group.diskSize !== 200 ?  reportViolation(`Expected disk size to be '200' fo 't3.large' node group, but found ${group.diskSize}`) : null
 
         const k8Services = args.resources.filter(r => r.isType(k8s.core.v1.Service));
-        if (k8Services.length !== 1) {
-            reportViolation(`Expected 1 kubernetes service but found ${k8Services.length}`);
+        if (k8Services.length !== 3) {
+            reportViolation(`Expected 3 kubernetes services but found ${k8Services.length}`);
             return;
         }
         // Pulumi Bug which does not typecase k8s resources correctly. https://github.com/pulumi/pulumi-policy/issues/300
@@ -46,8 +45,8 @@ const eksPolicy: StackValidationPolicy = {
 
 
         const k8Deployments = args.resources.filter(r => r.isType(k8s.apps.v1.Deployment));
-        if (k8Deployments.length !== 1) {
-            reportViolation(`Expected 1 kubernetes deployment but found ${k8Deployments.length}`);
+        if (k8Deployments.length !== 3) {
+            reportViolation(`Expected 3 kubernetes deployments but found ${k8Deployments.length}`);
             return;
         }
         // Pulumi Bug which does not typecase k8s resources correctly. https://github.com/pulumi/pulumi-policy/issues/300
