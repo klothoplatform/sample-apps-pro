@@ -2,3 +2,5 @@
 **/dist/
 **/compiled*/
 .brev
+**/.pytest_cache/
+**/Pipfile*
