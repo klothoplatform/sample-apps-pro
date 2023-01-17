@@ -1,6 +1,6 @@
-# Media Storage Sample App
+# Microservices Sample App
 
-The `ts-microservices` sample application demonstrates how to use the `@klotho::exec_unit` annotation to split an application up into smaller, functional units.
+The `ts-microservices` sample application demonstrates how to use the `@klotho::execution_unit` annotation to split an application up into smaller functional units.
 
 ## Prerequisites
 
