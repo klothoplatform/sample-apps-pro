@@ -15,19 +15,47 @@ const eksPolicy: StackValidationPolicy = {
         const cluster = eksClusters[0].asType(aws.eks.Cluster)
 
         const nodeGroups = args.resources.filter(r => r.isType(aws.eks.NodeGroup));
-        if (nodeGroups.length !== 1) {
-            reportViolation(`Node groups: expected 1 but found ${nodeGroups.length}`);
+        if (nodeGroups.length !== 2) {
+            reportViolation(`Expected three Node Groups but found ${nodeGroups.length}`);
             return;
         }
 
-        const group = nodeGroups[0].asType(aws.eks.NodeGroup)!;
-        if (group.clusterName != cluster?.name) {
-            reportViolation(`Expected cluster name for node group to be ${cluster?.name}, but found ${group.clusterName}`)
+        let c4LargeSubnetIds: any[] = [];
+        let t3LargeSubnetIds: any[] = [];
+        for (const i in nodeGroups) {
+            const group = nodeGroups[i].asType(aws.eks.NodeGroup)!;
+
+            if (group.clusterName != cluster?.name) {
+                reportViolation(`Expected cluster name for node group to be ${cluster?.name}, but found ${group.clusterName}`)
+            }
+
+            if (group.nodeGroupName.includes("c4-large")) {
+                group.diskSize !== 100 ?  reportViolation(`Expected disk size to be '100' fo 'c4.large' node group, but found ${group.diskSize}`) : null
+                group.labels!["network_placement"] !== "private"  ?  reportViolation(`Expected network placement label  to be 'private' fo 'c4.large' node group, but found ${group.labels!["network_placement"]}`) : null
+                c4LargeSubnetIds = group.subnetIds
+
+            } else if (group.nodeGroupName.includes("t3-large")) {
+                group.diskSize !== 200 ?  reportViolation(`Expected disk size to be '200' fo 't3.large' node group, but found ${group.diskSize}`) : null
+                group.labels!["network_placement"] !== "public"  ?  reportViolation(`Expected network placement label  to be 'public' fo 't3.large' node group, but found ${group.labels!["network_placement"]}`) : null
+                t3LargeSubnetIds = group.subnetIds
+            } else {
+                reportViolation(`Unknown Node Group, found ${group.nodeGroupName}`)
+            }
         }
+<<<<<<< Updated upstream
 
         const k8Services = args.resources.filter(r => r.isType(k8s.core.v1.Service));
         if (![3,5].includes(k8Services.length)) {
             reportViolation(`Expected 3 kubernetes services but found ${k8Services.length}`);
+=======
+        c4LargeSubnetIds == t3LargeSubnetIds ? reportViolation(`Expected node group to have different subnets`) : null
+
+
+
+        const k8Services = args.resources.filter(r => r.isType(k8s.core.v1.Service));
+        if (k8Services.length !== 3 && k8Services.length !== 5) {
+            reportViolation(`Expected 3 or 5 kubernetes service but found ${k8Services.length}`);
+>>>>>>> Stashed changes
             return;
         }
         // Pulumi Bug which does not typecase k8s resources correctly. https://github.com/pulumi/pulumi-policy/issues/300
@@ -45,8 +73,13 @@ const eksPolicy: StackValidationPolicy = {
 
 
         const k8Deployments = args.resources.filter(r => r.isType(k8s.apps.v1.Deployment));
+<<<<<<< Updated upstream
         if (![3,5].includes(k8Deployments.length)) {
             reportViolation(`Expected 3 kubernetes deployments but found ${k8Deployments.length}`);
+=======
+        if (k8Deployments.length !== 3 && k8Deployments.length !== 5) {
+            reportViolation(`Expected 1 kubernetes deployment but found ${k8Deployments.length}`);
+>>>>>>> Stashed changes
             return;
         }
         // Pulumi Bug which does not typecase k8s resources correctly. https://github.com/pulumi/pulumi-policy/issues/300
