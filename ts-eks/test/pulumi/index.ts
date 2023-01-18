@@ -42,20 +42,10 @@ const eksPolicy: StackValidationPolicy = {
                 reportViolation(`Unknown Node Group, found ${group.nodeGroupName}`)
             }
         }
-<<<<<<< Updated upstream
 
         const k8Services = args.resources.filter(r => r.isType(k8s.core.v1.Service));
         if (![3,5].includes(k8Services.length)) {
             reportViolation(`Expected 3 kubernetes services but found ${k8Services.length}`);
-=======
-        c4LargeSubnetIds == t3LargeSubnetIds ? reportViolation(`Expected node group to have different subnets`) : null
-
-
-
-        const k8Services = args.resources.filter(r => r.isType(k8s.core.v1.Service));
-        if (k8Services.length !== 3 && k8Services.length !== 5) {
-            reportViolation(`Expected 3 or 5 kubernetes service but found ${k8Services.length}`);
->>>>>>> Stashed changes
             return;
         }
         // Pulumi Bug which does not typecase k8s resources correctly. https://github.com/pulumi/pulumi-policy/issues/300
@@ -73,13 +63,8 @@ const eksPolicy: StackValidationPolicy = {
 
 
         const k8Deployments = args.resources.filter(r => r.isType(k8s.apps.v1.Deployment));
-<<<<<<< Updated upstream
         if (![3,5].includes(k8Deployments.length)) {
             reportViolation(`Expected 3 kubernetes deployments but found ${k8Deployments.length}`);
-=======
-        if (k8Deployments.length !== 3 && k8Deployments.length !== 5) {
-            reportViolation(`Expected 1 kubernetes deployment but found ${k8Deployments.length}`);
->>>>>>> Stashed changes
             return;
         }
         // Pulumi Bug which does not typecase k8s resources correctly. https://github.com/pulumi/pulumi-policy/issues/300
