@@ -4,3 +4,5 @@
 .brev
 **/.pytest_cache/
 **/Pipfile*
+__pycache__
+*.pyc
