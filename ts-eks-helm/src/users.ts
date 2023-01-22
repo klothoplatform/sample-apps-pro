@@ -1,4 +1,10 @@
 /**
+ * @klotho::execution_unit {
+ *  id = "user-store"
+ * }
+ */
+
+/**
  * @klotho::persist {
  *   id = "users"
  * }
