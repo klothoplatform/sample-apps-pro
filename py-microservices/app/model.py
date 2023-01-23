@@ -11,19 +11,25 @@ from datetime import datetime
 # }
 __users = Cache(Cache.MEMORY)
 
-
 async def get_user(id: str):
-    last_access_ts = await __users.get(id, default=False)
-    if not last_access_ts:
+    user_info = await __users.get(id, default=False)
+    if not user_info:
         return None
-    # aiocache turns last_access_ts into a decimal.Decimal, so convert it back to a float
-    last_access_dt = datetime.fromtimestamp(float(last_access_ts))
-    last_access_iso = last_access_dt.isoformat(timespec='seconds')
+    # aiocache turns the "created"timestamp into a decimal.Decimal, so convert it back to a float
+    created_dt = datetime.fromtimestamp(float(user_info["created"]))
+    created_iso = created_dt.isoformat(timespec='seconds')
     return {
         "id": id,
-        "last_accessed": last_access_iso
+        "created": created_iso,
+        "tags": user_info["tags"]
     }
 
 
-async def post_user(id: str):
-    await __users.set(id, datetime.utcnow().timestamp())
+async def post_user(id: str, *flat_tags: str, **value_tags: str):
+    await __users.set(id, {
+        "created": datetime.utcnow().timestamp(),
+        "tags": {
+            "flat": flat_tags,
+            "value": value_tags,
+        },
+    })
