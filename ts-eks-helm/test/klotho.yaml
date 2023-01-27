@@ -3,7 +3,15 @@ provider: aws
 path: .
 out_dir: compiled
 execution_units:
-    main:
+    user-api:
+        type: eks
+        helm_chart_options:
+            install: true
+    user-info:
+        type: eks
+        helm_chart_options:
+            install: true
+    user-store:
         type: eks
         helm_chart_options:
             install: true

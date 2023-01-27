@@ -15,14 +15,32 @@ const eksPolicy: StackValidationPolicy = {
         const cluster = eksClusters[0].asType(aws.eks.Cluster)
 
         const nodeGroups = args.resources.filter(r => r.isType(aws.eks.NodeGroup));
-        if (nodeGroups.length !== 1) {
-            reportViolation(`Node groups: expected 1 but found ${nodeGroups.length}`);
+        if (nodeGroups.length !== 2) {
+            reportViolation(`Expected three Node Groups but found ${nodeGroups.length}`);
             return;
         }
 
-        const group = nodeGroups[0].asType(aws.eks.NodeGroup)!;
-        if (group.clusterName != cluster?.name) {
-            reportViolation(`Expected cluster name for node group to be ${cluster?.name}, but found ${group.clusterName}`)
+        let c4LargeSubnetIds: any[] = [];
+        let t3LargeSubnetIds: any[] = [];
+        for (const i in nodeGroups) {
+            const group = nodeGroups[i].asType(aws.eks.NodeGroup)!;
+
+            if (group.clusterName != cluster?.name) {
+                reportViolation(`Expected cluster name for node group to be ${cluster?.name}, but found ${group.clusterName}`)
+            }
+
+            if (group.nodeGroupName.includes("c4-large")) {
+                group.diskSize !== 100 ?  reportViolation(`Expected disk size to be '100' fo 'c4.large' node group, but found ${group.diskSize}`) : null
+                group.labels!["network_placement"] !== "private"  ?  reportViolation(`Expected network placement label  to be 'private' fo 'c4.large' node group, but found ${group.labels!["network_placement"]}`) : null
+                c4LargeSubnetIds = group.subnetIds
+
+            } else if (group.nodeGroupName.includes("t3-large")) {
+                group.diskSize !== 200 ?  reportViolation(`Expected disk size to be '200' fo 't3.large' node group, but found ${group.diskSize}`) : null
+                group.labels!["network_placement"] !== "public"  ?  reportViolation(`Expected network placement label  to be 'public' fo 't3.large' node group, but found ${group.labels!["network_placement"]}`) : null
+                t3LargeSubnetIds = group.subnetIds
+            } else {
+                reportViolation(`Unknown Node Group, found ${group.nodeGroupName}`)
+            }
         }
 
         const k8Services = args.resources.filter(r => r.isType(k8s.core.v1.Service));
