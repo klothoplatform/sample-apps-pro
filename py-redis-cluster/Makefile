@@ -6,7 +6,7 @@ install:
 	pip install -r requirements.txt
 
 run:
-	uvicorn app.main:app --port=3000
+	PYTHONPATH=. python ./app/main.py
 
 integ-test:
 	pytest test/integration_tests.py

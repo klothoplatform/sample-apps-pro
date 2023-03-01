@@ -1,8 +1,7 @@
 from uvicorn import Server, Config
 import asyncio
 
-import users
-import quotes
+from app import users, quotes
 
 async def main():
     configs = [

@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from starlette.responses import PlainTextResponse
 from pydantic import BaseModel
 
-from my_redis import client
+from app.my_redis import client
 
 # @klotho::expose {
 #   id = "users-gw"
