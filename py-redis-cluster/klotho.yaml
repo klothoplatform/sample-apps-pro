@@ -1,3 +1,20 @@
+execution_units:
+    quotes:
+        type: eks
+        network_placement: private
+        pulumi_params:
+            nodeType: node
+            replicas: 1
+            nodeConstraints:
+                instanceType: t3.xlarge
+    users:
+        type: eks
+        network_placement: private
+        pulumi_params:
+            nodeType: node
+            replicas: 1
+            nodeConstraints:
+                instanceType: g3.4xlarge
 persisted:
     redis:
         type: memorydb
