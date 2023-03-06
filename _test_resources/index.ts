@@ -80,7 +80,7 @@ const subnetGroup = new aws.rds.SubnetGroup('rds-subnet-group', {
 
 
 // create the db resources
-const dbName = "TestDB"
+const dbName = "test-db"
 
 const rds = new aws.rds.Instance(
     dbName,
@@ -191,7 +191,7 @@ const proxyTarget = new aws.rds.ProxyTarget(`${dbName}`, {
 
 // elasticache redis resources
 
-const clusterName = "elasticacheRedis"
+const clusterName = "elasticache-redis"
 const logGroupName = `/aws/elasticache/${clusterName}-persist-redis`
 let cloudwatchGroup = new aws.cloudwatch.LogGroup(`persist-redis-${clusterName}-lg`, {
     name: `${logGroupName}`,
@@ -232,7 +232,7 @@ new aws.elasticache.Cluster(
 
 
 // memorydb resources
-const memdbClusterName = 'memorydbCluster'
+const memdbClusterName = 'memorydb-cluster'
 const memdbSubnetGroup = new aws.memorydb.SubnetGroup(`${memdbClusterName}-subnetgroup`,{
         subnetIds: vpc.privateSubnetIds,
         tags: {
