@@ -80,12 +80,15 @@ const subnetGroup = new aws.rds.SubnetGroup('rds-subnet-group', {
 
 
 // create the db resources
-const dbName = "test-db"
+const dbName = "testdb"
 
 const rds = new aws.rds.Instance(
     dbName,
     {
         instanceClass: 'db.t4g.micro',
+        allocatedStorage:  20,
+        skipFinalSnapshot: true,
+        engineVersion:     "13.7",
         engine: 'postgres',
         dbName: dbName,
         username,
@@ -211,6 +214,8 @@ new aws.elasticache.Cluster(
     {
         engine: 'redis',
         clusterId: clusterName,
+        nodeType:      "cache.t3.micro",
+        numCacheNodes: 1,
         logDeliveryConfigurations: [
             {
                 destination: cloudwatchGroup.name,
@@ -245,6 +250,8 @@ new aws.memorydb.Cluster(
     clusterName,
     {
         name: memdbClusterName,
+        numReplicasPerShard: 1,
+        numShards:           2,
         aclName: 'open-access',
         nodeType: 'db.t4g.small',
         securityGroupIds: [sg.id],
